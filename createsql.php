@@ -45,6 +45,6 @@ foreach ($posts as $post) {
 for($i=0; $i<50; $i++){
     $password = password_hash($faker->password, PASSWORD_BCRYPT);
     $pdo->exec("INSERT INTO user SET 
-        username='{$faker->name()}', 
-        password='$password' ");
+        username='{$faker->username}', 
+        password='{$password}' ");
 }

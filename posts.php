@@ -7,6 +7,6 @@
     <title>Article</title>
 </head>
 <body>
-    <h1>Article 1</h1>
+    <h1>Articles</h1>
 </body>
 </html>
