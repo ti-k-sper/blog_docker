@@ -30,4 +30,5 @@ $router = new App\Router($basePath . 'views');
 $router->get('/', 'index', 'home')
     ->get('/categories', 'categories', 'categories')
     ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
+    ->get('/contact', 'contact', 'contact')
     ->run();

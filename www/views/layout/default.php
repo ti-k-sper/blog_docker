@@ -44,7 +44,7 @@
 
     <footer class="footer bg-dark fixed-bottom py-1">
         <div class="text-center">
-            <span class="text-white">by julien</span>
+            <span class="text-white">realised by Yannick (in training)</span>
         </div>
     </footer>
 

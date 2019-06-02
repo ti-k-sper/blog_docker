@@ -4,6 +4,7 @@ require_once '/var/www/vendor/autoload.php';//faker
 $pdo = New PDO('mysql:host=blog.mysql;dbname=blog;charset=UTF8', 'userblog', 'blogpwd');
 
 //création tables
+//slug pour l'url
 $pdo->exec("CREATE TABLE post(
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,

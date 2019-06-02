@@ -39,6 +39,7 @@ $title = 'Mon Super MEGA blog';
         <?= $message ?>
     </div>
 <?php endif ?>
+
 <section class="row">
     <?php foreach ($posts as $post) : ?>
         <article class="col-3 mb-4 d-flex align-items-stretch">
@@ -55,6 +56,7 @@ $title = 'Mon Super MEGA blog';
         </article>
     <?php endforeach; ?>
 </section>
+
 <nav class="Page navigation">
     <ul class="pagination justify-content-center">
         <?php for ($i = 1; $i <= $nbPage; $i++) : ?>
