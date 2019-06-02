@@ -17,14 +17,14 @@ class Router
     public function get(string $uri, string $file, string $name): self
     {
         $this->router->map('GET', $uri, $file, $name);
-        return $this;
+        return $this;// pour ajouter différents get lors de l'appel
     }
 
-
+    //verifie si une route match avec les routes prédéfinies
     public function run(): void
     {
         $match = $this->router->match();
-        ob_start();
+        ob_start();//démarrage du cache
         if (is_array($match)) {
             $params = $match['params'];
             require $this->pathToFile($match['target']);
@@ -33,7 +33,7 @@ class Router
             header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
             require $this->pathToFile("layout/404");
         }
-        $content = ob_get_clean();
+        $content = ob_get_clean();//récupération du cache en string (html)
         require $this->pathToFile("layout/default");
     }
 

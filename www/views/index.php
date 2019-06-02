@@ -2,7 +2,7 @@
 
 
 $pdo = new PDO(
-    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE'), 
+    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE') . ";charset=UTF8", 
     getenv('MYSQL_USER'), 
     getenv('MYSQL_PASSWORD'));
 
