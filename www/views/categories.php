@@ -4,11 +4,20 @@
  * 
  */
 $title = "Catégories";
+
+$pdo = new PDO(
+    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE') . ";charset=UTF8", 
+    getenv('MYSQL_USER'), 
+    getenv('MYSQL_PASSWORD'));
+
+$categories = $pdo->query("SELECT * FROM category ")
+            ->fetchAll();
+//dump($categories);
+
 ?>
 
 <ul>
-    <li>categorie 1</li>
-    <li>categorie 2</li>
-    <li>categorie 3</li>
-    <li>categorie 4</li>
+    <?php foreach ($categories as $category) : ?>
+        <li><a href="<?= $category['slug'] ?>-<?= $category['id'] ?>">Categorie <?= $category['name'] ?></a></li>
+    <?php endforeach; ?>
 </ul>
