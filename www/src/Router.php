@@ -3,12 +3,14 @@ namespace App;
 
 class Router
 {
-    private $router;//ne sort pas de la class
+
+    private $router;
+
     private $viewPath;
 
     public function __construct(string $viewPath)
     {
-        $this->viewPath = $viewPath;//variable récup en private
+        $this->viewPath = $viewPath;
         $this->router = new \AltoRouter();
     }
 
@@ -34,6 +36,7 @@ class Router
         $content = ob_get_clean();
         require $this->pathToFile("layout/default");
     }
+
     private function pathToFile(string $file): string
     {
         return $this->viewPath . DIRECTORY_SEPARATOR . $file . '.php';
