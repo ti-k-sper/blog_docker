@@ -31,7 +31,7 @@ $posts = $pdo->query("SELECT * FROM post
     ->fetchAll(PDO::FETCH_OBJ);
 
 
-$title = 'Mon Super MEGA blog';
+$title = 'Mon blog en MVC';
 ?>
 
 <?php if (null !== $message) : ?>
@@ -42,7 +42,7 @@ $title = 'Mon Super MEGA blog';
 
 <section class="row">
     <?php foreach ($posts as $post) : ?>
-        <article class="col-3 mb-4 d-flex align-items-stretch">
+        <article class="col-3 mb-4 d-flex align-items-stretch article">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><?= $post->name ?></h5>

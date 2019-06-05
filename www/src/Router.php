@@ -7,13 +7,13 @@ class Router
     private $router;
 
     private $viewPath;
-
+    //        = contruction de l'objet
     public function __construct(string $viewPath)
     {
         $this->viewPath = $viewPath;
         $this->router = new \AltoRouter();
     }
-
+    //       =$_GET          URL         fichier     nom route
     public function get(string $uri, string $file, string $name): self
     {
         $this->router->map('GET', $uri, $file, $name);

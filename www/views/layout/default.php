@@ -29,8 +29,8 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                <input id="inputSearch" class="form-control mr-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" onclick="getValue()" type="button">Search</button>
             </form>
         </div>
     </nav>
@@ -48,5 +48,50 @@
         </div>
     </footer>
 
+    <style type="text/css">
+        .highlight{
+            background: yellow;
+            border: 2px inset grey;
+            }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        /*function getValue(){
+            $('span').contents().unwrap();
+            //$("span").removeAttr("style");
+            var word = $('#inputSearch').val();//récupère la valeur de l'input #inputSearch
+            var field = $('.article').html();//récupère le contenu html de l'article #article
+            var pos = field.indexOf(word);//cherche la première occurence du mot
+            var re = new RegExp('('+word+')(?![]^<>*)', "gi");//créer une expression régulière qui accept le mot mais exclu les caractères spéciaux
+            if (pos > -1){
+                //remplace tout les mots de la chaîne de caractère originale en fonction de la RegExp puis la stocke dans le content
+                var content = field.replace(re, '<span style="background-color: yellow">'+word+'</span>');
+                //Remplace le contenu original par le nouveau contenu
+                $('.article').html(content);
+            }
+        }*/
+
+        function getValue() {
+            /* TO DO
+                Gérer la casse,
+                Supprimer les spans en trop de l'article traité
+            */
+
+            //$('span').removeAttr('style');
+            $('span').contents().unwrap();
+            var word = $('#inputSearch').val();// Récupère la valeur de l'input#inputSearch
+            var field = $('.article').html();//Récupère le contenu html de l'article#article
+            var pos = field.indexOf(word); //Cherche la première occurence du mot word
+            var re = new RegExp('('+word+')(?![^<]*>)', "gi"); //Créé une expression régulière qui accepte le mot word mais exclue les caractères spéciaux
+            if (pos > -1){
+                //Remplace tous les mots word de la chaine de caractère originale en fonction de la regExp puis la stocke dans content
+                var content = field.replace (re, '<span style="background-color: #00FF00">'+word+'</span>');
+                //remplace le contenu orginal par le nouveau contenu
+                $('.article').html(content);  
+            }
+        }
+    </script>
 </body>
 </html>

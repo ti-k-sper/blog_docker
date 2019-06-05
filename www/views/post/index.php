@@ -25,6 +25,18 @@ $postCreated = $post['created_at'];
 
 <!-- <p>article avec l'id <big><?= $id . '</big> et le slug <big>' . $slug ?></big></p> -->
 
-<h5><?= $postName ?></h5>
-<p><?= $postContent ?></p>
-<p><?= $postCreated ?></p>
+<section>
+    <article class="article">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><?= $postName ?></h5>
+                <p class="card-text"><?= $postContent ?></p>
+            </div>
+            <div class="card-footer text-muted">
+                <?= (new DateTime($postCreated_at))->format('d/m/Y h:i') ?>
+            </div>
+        </div>
+    </article>
+</section>
+
+
