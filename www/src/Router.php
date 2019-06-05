@@ -19,11 +19,17 @@ class Router
         $this->router->map('GET', $uri, $file, $name);
         return $this;// pour ajouter différents get lors de l'appel
     }
+    //$router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()])
+    public function url(string $name, array $params = []): string
+    {
+        return $this->router->generate($name, $params);
+    }
 
     //verifie si une route match avec les routes prédéfinies
     public function run(): void
     {
         $match = $this->router->match();
+        $router = $this;//$router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]), variable que ds views
         ob_start();//démarrage du cache
         if (is_array($match)) {
             $params = $match['params'];

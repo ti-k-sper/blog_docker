@@ -13,13 +13,12 @@ $pdo = new PDO(
     getenv('MYSQL_USER'), 
     getenv('MYSQL_PASSWORD'));
 
-$post = $pdo->query("SELECT * FROM post WHERE id = {$id} ")
-            ->fetch();
+$statement = $pdo->prepare("SELECT * FROM post WHERE id = ? ");
+$statement->execute([$id]);
+$statement->setFetchMode(PDO::FETCH_OBJ);
+$post = $statement->fetch();
 //dump($post);
 
-$postName = $post['name'];
-$postContent = $post['content'];
-$postCreated = $post['created_at'];
 
 ?>
 
@@ -29,11 +28,11 @@ $postCreated = $post['created_at'];
     <article class="article">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"><?= $postName ?></h5>
-                <p class="card-text"><?= $postContent ?></p>
+                <h5 class="card-title"><?= $post->name ?></h5>
+                <p class="card-text"><?= nl2br(htmlspecialchars($post->content)) ?></p>
             </div>
             <div class="card-footer text-muted">
-                <?= (new DateTime($postCreated_at))->format('d/m/Y h:i') ?>
+                <?= (new DateTime($post->created_at))->format('d/m/Y h:i') ?>
             </div>
         </div>
     </article>
