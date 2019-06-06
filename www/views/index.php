@@ -1,11 +1,9 @@
 <?php
 use App\Model\Post;
 use App\Helpers\Text;
+use App\Connection;
 
-$pdo = new PDO(
-    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE') . ";charset=UTF8", 
-    getenv('MYSQL_USER'), 
-    getenv('MYSQL_PASSWORD'));
+$pdo = Connection::getPDO();
 
 
 

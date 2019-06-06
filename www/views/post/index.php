@@ -3,21 +3,35 @@ use App\Model\{
     Post,
     Category
 };
+use App\Connection;
 
 $id = (int)$params['id'];
 $slug = $params['slug'];
 
 
-$pdo = new PDO(
-    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE') . ";charset=UTF8", 
-    getenv('MYSQL_USER'), 
-    getenv('MYSQL_PASSWORD'));
+$pdo = Connection::getPDO();
 
 $statement = $pdo->prepare("SELECT * FROM post WHERE id = ? ");
 $statement->execute([$id]);
 $statement->setFetchMode(PDO::FETCH_CLASS, Post::class);
+/**@var Post|false */
 $post = $statement->fetch();
-//dump($post);
+//Si aucun article correspond à l'id
+if (!$post) {
+    throw new Exception('Aucun article ne correspond à cet ID');
+}
+if ($post->getSlug() !== $slug) {
+    $url = $router->url(
+        'post',
+        [
+            'id' => $id,
+            'slug' => $post->getSlug()
+        ]
+    );
+    http_response_code(301);
+    header('Location: ' . $url);
+    exit();
+}
 
 //requete avec JOIN
 $query = $pdo->prepare('
