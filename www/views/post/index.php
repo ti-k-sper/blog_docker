@@ -31,6 +31,7 @@ $query->setFetchMode(PDO::FETCH_CLASS, Category::class);
 /** @var Category[] */
 $categories = $query->fetchAll();
 
+
 $title = "Article : " . $post->getSlug();
 
 ?>
