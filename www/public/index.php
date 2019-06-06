@@ -32,6 +32,7 @@ $router = new App\Router($basePath . 'views');
 
 $router->get('/', 'index', 'home')
     ->get('/categories', 'categories', 'categories')
+    ->get('/category/[*:slug]-[i:id]', 'category', 'category')
     ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
     ->get('/contact', 'contact', 'contact')
     ->run();
