@@ -35,56 +35,16 @@ if ($category->getSlug() !== $slug) {
 
 $title = 'categorie : ' . $category->getName();
 
+$uri = $router->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
 
+$paginatedQuery = new App\PaginatedQuery(
+    "SELECT count(category_id) FROM post_category WHERE category_id = {$category->getId()}", 
+    "SELECT p.* FROM post p JOIN post_category pc ON pc.post_id = p.id WHERE pc.category_id = {$category->getId()} ORDER BY created_at DESC", 
+    Post::class, 
+    $uri 
+);
 
-/**
- *      $paginatedQuery = new App\PaginatedQuery(queryCount, query, class, url,perpage = 12)
- *      $post = $paginatedQuery->getContent()
- *      
- *      *** special ***
- *      querycount
- *      query
- *      class
- * 
- *      *** comun *** 
- *      perpage
- * 
- * 
- */
-$nbpost = $pdo->query("SELECT count(category_id) FROM post_category WHERE category_id = {$category->getId()}")->fetch()[0];
-$perPage = 12;
-$nbPage = ceil($nbpost / $perPage);
-
-if ((int)$_GET["page"] > $nbPage) {
-    throw new Exception('pas de pages');
-}
-
-if (isset($_GET["page"])) {
-    $currentpage = (int)$_GET["page"];
-} else {
-    $currentpage = 1;
-}
-$offset = ($currentpage - 1) * $perPage;
-
-
-$statement = $pdo->query("
-                    SELECT p.*
-                    FROM post p
-                    JOIN post_category pc ON pc.post_id = p.id
-                    WHERE pc.category_id = {$category->getId()}
-                    ORDER BY created_at DESC
-                    LIMIT {$perPage} 
-                    OFFSET {$offset}");
-
-$statement->setFetchMode(PDO::FETCH_CLASS, Post::class);
-/**@var Post[]|false */
-$posts = $statement->fetchAll();
-
-/**
- * 
- * fin refacto
- */
-
+$posts = $paginatedQuery->getItems();
 
 ?>
 

@@ -18,6 +18,6 @@ $categories = $pdo->query("SELECT * FROM category ")
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-        <li><a href="<?= $category['slug'] ?>-<?= $category['id'] ?>">Catégorie <?= $category['name'] ?></a></li>
+        <li><a href="/category/<?= $category['slug'] ?>-<?= $category['id'] ?>">Catégorie <?= $category['name'] ?></a></li>
     <?php endforeach; ?>
 </ul>
