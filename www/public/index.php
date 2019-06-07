@@ -11,9 +11,9 @@ if(getenv("ENV_DEV")){
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
-$numPge = App\URL::getPositiveInt('page');
+$numPage = App\URL::getPositiveInt('page');
 
-if ($numPage !== null && App\URL::getPositiveInt('page', 1)) {
+if ($numPage !== null) {
     // url /categories?page=1&parm2=pomme
     if ((int)$_GET["page"] == 1) {
         $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
