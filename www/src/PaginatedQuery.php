@@ -29,22 +29,23 @@ class PaginatedQuery
         $this->perPage = $perPage;
         $this->pdo = Connection::getPDO();
     }
-    
+    //affichage des articles ds le fichiers show.php
     public function getItems(): array
     {
         $nbpost = $this->pdo->query($this->queryCount)->fetch()[0];
         $nbPage = ceil($nbpost / $this->perPage);
+        $currentPage = URL::getPositiveInt('page', 1);
 
-        if ((int)$_GET["page"] > $nbPage) {
+        if ($currentPage > $nbPage) {
             throw new \Exception('pas de pages');
         }
 
         if (isset($_GET["page"])) {
-            $currentpage = (int)$_GET["page"];
+            $currentPage = (int)$_GET["page"];
         } else {
-            $currentpage = 1;
+            $currentPage = 1;
         }
-        $offset = ($currentpage - 1) * $this->perPage;
+        $offset = ($currentPage - 1) * $this->perPage;
 
 
         $statement = $this->pdo->query("
@@ -54,21 +55,7 @@ class PaginatedQuery
 
         $statement->setFetchMode(\PDO::FETCH_CLASS, $this->classMapping);
         /**@var Post[]|false */
-        return $statement->fetchAll();;
+        return $statement->fetchAll();
     }
 }
 
-/**
- *      $paginatedQuery = new App\PaginatedQuery(queryCount, query, class, url, perPage = 12)
- *      $post = $paginatedQuery->getItems()
- *      
- *      *** special ***
- *      querycount
- *      query
- *      class
- * 
- *      *** comun *** 
- *      perpage
- * 
- * 
- */

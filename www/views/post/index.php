@@ -3,35 +3,15 @@ use App\Model\Post;
 use App\Helpers\Text;
 use App\Connection;
 
-$pdo = Connection::getPDO();
+$paginatedQuery = new App\PaginatedQuery(
+    "SELECT count(id) FROM post", 
+    "SELECT * FROM post 
+    ORDER BY id", 
+    Post::class, 
+    $router->url('home')
+);
 
-
-
-$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0];
-$perPage = 12;
-$nbPage = ceil($nbpost / $perPage);
-
-if ((int)$_GET["page"] > $nbPage) {
-    header('location: /');
-    exit();
-}
-
-if (isset($_GET["page"])) {
-    $currentpage = (int)$_GET["page"];
-} else {
-    $currentpage = 1;
-}
-$offset = ($currentpage - 1) * $perPage;
-
-$statement = $pdo->query("SELECT * FROM post 
-                    ORDER BY id 
-                    LIMIT {$perPage} 
-                    OFFSET {$offset}");
-$statement->setFetchMode(PDO::FETCH_CLASS, Post::class);
-$posts = $statement->fetchAll();
-
-//dd($posts);
-
+$posts = $paginatedQuery->getItems();
 
 $title = 'Mon blog en MVC';
 ?>
