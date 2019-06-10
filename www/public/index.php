@@ -11,6 +11,7 @@ if(getenv("ENV_DEV")){
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
+
 $numPage = App\URL::getPositiveInt('page');
 
 if ($numPage !== null) {
