@@ -102,3 +102,4 @@ class PaginatedQuery
         </nav>
 HTML;
     }
+}
