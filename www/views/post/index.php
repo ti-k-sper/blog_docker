@@ -22,7 +22,7 @@ $title = 'Mon blog en MVC';
     </div>
 <?php endif ?>
 
-<section class="row">
+<section class="row articles">
     <?php foreach ($posts as $post) : ?>
         <article class="col-3 mb-4 d-flex align-items-stretch article">
             <div class="card">
