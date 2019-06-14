@@ -1,23 +1,23 @@
 <?php
-/**
- * fichier qui génère la vue pour l'url /categories
- * 
- */
-$title = "Catégories";
+use App\Model\{
+    Post,
+    Category
+};
+use App\Connection;
+use App\Helpers\Text;
 
-$pdo = new PDO(
-    "mysql:host=" . getenv('MYSQL_HOST') . ";dbname=" . getenv('MYSQL_DATABASE') . ";charset=UTF8", 
-    getenv('MYSQL_USER'), 
-    getenv('MYSQL_PASSWORD'));
+$pdo = Connection::getPDO();
+
 
 $categories = $pdo->query("SELECT * FROM category ")
             ->fetchAll();
-//dump($categories);
+
+$title = "Catégories";
 
 ?>
 
-<ul>
+<ul class="list-group list-group-flush">
     <?php foreach ($categories as $category) : ?>
-        <li><a href="/category/<?= $category['slug'] ?>-<?= $category['id'] ?>">Catégorie <?= $category['name'] ?></a></li>
+        <li class="list-group-item"><a href="/category/<?= $category['slug'] ?>-<?= $category['id'] ?>">Catégorie <?= $category['name'] ?></a></li>
     <?php endforeach; ?>
 </ul>

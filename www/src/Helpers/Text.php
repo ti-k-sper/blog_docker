@@ -3,21 +3,20 @@ namespace App\Helpers;
 
 class Text
 {
-    //              Text::excerpt($post->getContent(), 200)
     public static function excerpt(string $content, int $limit = 100): string
     {
-        //"#<.+>.+</.+>#isU" => pour detecter les toutes les balises html
-        if(preg_match("#<.+>.+</.+>#isU", $content)){
-            $content = strip_tags($content);
+        $text = strip_tags($content);
+        if (strlen($text) <= $limit) {
+            return $text;
         }
-        //mb => pour œ -> 1 caractere
-        if(mb_strlen($content) <= $limit){
-            return $content;
+        //return substr($text, 0, (strpos($text, ' ', $limit-1)?: $limit)). "...";
+        if (strpos($text, ' ', $limit-1)) {
+            $lastpos = strpos($text, ' ', $limit-1);
+        } else {
+            $lastpos = $limit;
         }
-        $lastSpace = mb_strpos($content, ' ', ($limit -1));//pour ne pas couper les mots
-        if(empty($lastSpace)){
-            return mb_substr($content, 0, $limit) . '...';
-        }
-        return mb_substr($content, 0, $lastSpace) . '...';
+        //$lastpos = strpos($text, ' ', $limit-1)?: $limit;
+        
+        return substr($text, 0, $lastpos). "...";
     }
 }

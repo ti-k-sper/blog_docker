@@ -52,6 +52,10 @@ $posts = $paginatedQuery->getItems();
 <section class="row">
     <?php /** @var Post::class $post */
     foreach ($posts as $post) {
+        $postById[$post->getId()] = $post;
+        $categories = Post::queryCategories($post->getId());
+        $postById[$post->getId()]->setCategories($categories);
+        $categories = $post->getCategories();
         require dirname(__dir__) . '/post/card.php';
     }
     ?>
