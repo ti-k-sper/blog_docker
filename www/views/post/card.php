@@ -1,21 +1,18 @@
 <article class="col-3 mb-4 d-flex align-items-stretch">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title"><?= $post->getName() ?></h5><hr />
-            <div>
-                <?php foreach ($categories as $key => $category) :
-                    if ($key > 0) {
-                    echo ', ';
-                    }
-                    $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]); ?>
-                    <a href="<?= $category_url ?>"><?= $category->getName() ?></a>
-                <?php endforeach ?>
-            </div><hr />
+            <h5 class="card-title"><?= $post->getName() ?></h5>
             <p class="card-text"><?= $post->getExcerpt(200) ?></p>
+            <a  class="card-link" href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>">lire plus</a>
+
         </div>
-            <a href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>" class="text-center pb-2">lire plus</a>
+        <ul class="list-group list-group-flush ">
+            <?php foreach($post->getCategories() as $category): ?>
+                <li class="list-group-item bg-light"><a href="<?= $router->url('category', ['id' => $category->getId(), 'slug' => $category->getSlug()]) ?>"><?= $category->getName() ?></a></li>
+            <?php endforeach ?>
+        </ul>
         <div class="card-footer text-muted">
-            <?= $post->getCreatedAt()->format('d/m/Y h:i') ?>
+            <?= $post->getCreatedAt()->format('d/m/Y h:i')   ?>
         </div>
     </div>
 </article>

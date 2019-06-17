@@ -3,6 +3,7 @@ namespace App\Model;
 
 class Category
 {
+
     private $id;
 
     private $slug;
@@ -18,7 +19,7 @@ class Category
     {
         return $this->slug;
     }
-    
+
     public function getName(): string
     {
         return $this->name;

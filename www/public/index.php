@@ -1,22 +1,21 @@
 <?php
 
-define("GENERATE_TIME_START", microtime(TRUE));
-
+$start = microtime(true);
 $basePath = dirname(__dir__) . DIRECTORY_SEPARATOR;
 
 require_once $basePath . 'vendor/autoload.php';
 
-if(getenv("ENV_DEV")){
+if (getenv("ENV_DEV")) {
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
 
-$numPage = App\URL::getPositiveInt('page');
+$numPage = \App\URL::getPositiveInt('page');
 
 if ($numPage !== null) {
     // url /categories?page=1&parm2=pomme
-    if ((int)$_GET["page"] == 1) {
+    if ($numPage == 1) {
         $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
         $get = $_GET;
         unset($get["page"]);
@@ -36,5 +35,5 @@ $router->get('/', 'post/index', 'home')
     ->get('/categories', 'category/index', 'categories')
     ->get('/category/[*:slug]-[i:id]', 'category/show', 'category')
     ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
-    ->get('/contact', 'contact', 'contact')
+    ->get('/test', 'Twig#index', 'test')
     ->run();

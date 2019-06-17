@@ -19,11 +19,11 @@ services:
     container_name: blog.mysql
     restart: unless-stopped
     image: mariadb
-    networks:
+    networks: 
       - blog
     env_file:
       - .env
 
-networks:
+networks: 
   blog:
     driver: bridge

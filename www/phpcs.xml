@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <ruleset name="Framework">
-    <description>Règle pour phpcs</description>
-    <arg name="color"/>
+    <description>Règles pour phpcs</description>
+    <arg name="colors"/>
     <arg value="p"/>
 
 
@@ -9,9 +9,9 @@
     <file>tests</file>
     <file>public/index.php</file>
 
-    <ruleset ref="PSR2">
+    <rule ref="PSR2">
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
     </rule>
-    <rule ref="Generic.Array.DisallowLongArraySyntax"/>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
 </ruleset>

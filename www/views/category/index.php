@@ -1,23 +1,21 @@
 <?php
-use App\Model\{
-    Post,
-    Category
-};
-use App\Connection;
-use App\Helpers\Text;
+use App\Model\Category;
 
-$pdo = Connection::getPDO();
-
-
-$categories = $pdo->query("SELECT * FROM category ")
-            ->fetchAll();
-
+$paginatedQuery = new App\PaginatedQuery(
+    "SELECT count(id) FROM category",
+    "SELECT * FROM category 
+    ORDER BY id",
+    Category::class,
+    $router->url('categories'),
+    10
+);
+$categories = $paginatedQuery->getItems();
 $title = "Catégories";
 
-?>
-
-<ul class="list-group list-group-flush">
-    <?php foreach ($categories as $category) : ?>
-        <li class="list-group-item"><a href="/category/<?= $category['slug'] ?>-<?= $category['id'] ?>">Catégorie <?= $category['name'] ?></a></li>
-    <?php endforeach; ?>
-</ul>
+echo "<ul>";
+foreach ($categories as $category) {
+    $url = $router->url('category', ['id' => $category->getId(), "slug" => $category->getSlug()]);
+    echo "<li><a href=\"{$url}\">{$category->getName()}</a></li>";
+}
+echo "</ul>";
+echo $paginatedQuery->getNavHtml();

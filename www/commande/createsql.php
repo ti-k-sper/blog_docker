@@ -1,88 +1,96 @@
 <?php
-require_once '/var/www/vendor/autoload.php';//faker
+require_once '/var/www/vendor/autoload.php';
 
-$pdo = New PDO('mysql:host=blog.mysql;dbname=blog;charset=UTF8', 'userblog', 'blogpwd');
+$pdo = new PDO('mysql:host=blog.mysql;dbname=blog', 'userblog', 'blogpwd');
 
-//création tables
-//slug pour l'url
-$pdo->exec("CREATE TABLE post(
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    content TEXT(650000) NOT NULL,
-    created_at DATETIME NOT NULL,
-    PRIMARY KEY (id)
-)");
-$pdo->exec("CREATE TABLE category(
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
-)");
-$pdo->exec("CREATE TABLE user(
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
-)");
+//creation tables
+echo "[";
+$etape = $pdo->exec("CREATE TABLE post(
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            content TEXT(650000) NOT NULL,
+            created_at DATETIME NOT NULL,
+            PRIMARY KEY(id)
+        )");
+echo "||";
+$etape = $pdo->exec("CREATE TABLE category(
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id)
+        )");
+echo "||";
+$etape = $pdo->exec("CREATE TABLE user(
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id)
+        )");
+echo "||";
 $pdo->exec("CREATE TABLE post_category(
-    post_id INT UNSIGNED NOT NULL,
-    category_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (post_id, category_id),
-    CONSTRAINT fk_post
-        FOREIGN KEY (post_id)
-        REFERENCES post (id)
-        ON DELETE CASCADE
-        ON UPDATE RESTRICT,
-    CONSTRAINT fk_category
-        FOREIGN KEY (category_id)
-        REFERENCES category (id)
-        ON DELETE CASCADE
-        ON UPDATE RESTRICT
-)");
+            post_id INT UNSIGNED NOT NULL,
+            category_id INT UNSIGNED NOT NULL,
+            PRIMARY KEY(post_id, category_id),
+            CONSTRAINT fk_post
+                FOREIGN KEY(post_id)
+                REFERENCES post(id)
+                ON DELETE CASCADE
+                ON UPDATE RESTRICT,
+            CONSTRAINT fk_category
+                FOREIGN KEY(category_id)
+                REFERENCES category(id)
+                ON DELETE CASCADE
+                ON UPDATE RESTRICT
+        )");
+echo "||";
+
 
 //vidage table
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
 $pdo->exec('TRUNCATE TABLE post_category');
 $pdo->exec('TRUNCATE TABLE post');
-$pdo->exec('TRUNCATE TABLE category');
 $pdo->exec('TRUNCATE TABLE user');
+$pdo->exec('TRUNCATE TABLE category');
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
-
-// use the factory to create a Faker\Generator instance
+echo "||||||||||||";
 $faker = Faker\Factory::create('fr_FR');
-//dd($faker);
-
+echo "||";
 $posts = [];
 $categories = [];
-
-for($i=0; $i<50; $i++){
-    $pdo->exec("INSERT INTO post SET 
-        name='{$faker->sentence()}', 
-        slug='{$faker->slug}', 
-        content='{$faker->paragraphs(rand(3, 15), true)}', 
-        created_at='{$faker->date} {$faker->time}' ");
+echo "||";
+for ($i = 0; $i < 50; $i++) {
+    $pdo->exec("INSERT INTO post SET
+        name='{$faker->sentence()}',
+        slug='{$faker->slug}',
+        created_at ='{$faker->date} {$faker->time}',
+        content='{$faker->paragraphs(rand(3, 15), true)}'");
     $posts[] = $pdo->lastInsertId();
+    echo "|";
 }
 
-for($i=0; $i<5; $i++){
-    $pdo->exec("INSERT INTO category SET 
-        name='{$faker->sentence(3, false)}', 
-        slug='{$faker->slug}' ");
+for ($i = 0; $i < 5; $i++) {
+    $pdo->exec("INSERT INTO category SET
+        name='{$faker->sentence(3, false)}',
+        slug='{$faker->slug}'");
     $categories[] = $pdo->lastInsertId();
+    echo "|";
 }
 
 foreach ($posts as $post) {
-    $randomCategories = $faker->randomElements($categories, 2);//dans la parenthese le chiffre correspond aux nombre de categorie pour 1 article
+    $randomCategories = $faker->randomElements($categories, 2);
     foreach ($randomCategories as $category) {
-        $pdo->exec("INSERT INTO post_category SET 
-                    post_id={$post}, 
-                    category_id={$category} ");
+        $pdo->exec("INSERT INTO post_category SET
+                            post_id={$post},
+                            category_id={$category}");
+        echo "|";
     }
 }
 
 $password = password_hash('admin', PASSWORD_BCRYPT);
+echo "||";
 
-$pdo->exec("INSERT INTO user SET 
-    username='admin', 
-    password='{$password}' ");
+$pdo->exec("INSERT INTO user SET
+        username='admin',
+        password='{$password}'");
+echo "||]";

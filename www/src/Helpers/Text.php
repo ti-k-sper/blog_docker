@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 class Text
@@ -10,6 +11,7 @@ class Text
             return $text;
         }
         //return substr($text, 0, (strpos($text, ' ', $limit-1)?: $limit)). "...";
+
         if (strpos($text, ' ', $limit-1)) {
             $lastpos = strpos($text, ' ', $limit-1);
         } else {
