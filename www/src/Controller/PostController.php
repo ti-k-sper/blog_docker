@@ -2,46 +2,26 @@
 namespace App\Controller;
 
 use \App\Model\Entity\PostEntity;
+
 use \App\Model\Entity\CategoryEntity;
+
 
 class PostController extends Controller
 {
     public function __construct()
     {
-        $this->loadModel('post');
+        $this->loadModel('post');//3
         //$this->post
     }
     
     public function all()
     {
-        dd($this->post);
-        $paginatedQuery = new \App\PaginatedQuery(
-            "SELECT count(id) FROM post",
-            "SELECT * FROM post ORDER BY created_at DESC",
-            Post::class,
-            $this->getRouter()
-                ->url('home')
+        //dd($this->post);
+        $paginatedQuery = new PaginatedQueryController(
+            $this->post,
+            $this->generateUrl('home')
         );
-        $posts = $paginatedQuery->getItems();
         
-        $ids = array_map(function (Post $post) {
-            return $post->getId();
-        }, $posts);
-        
-        $categories = Connection::getPDO()
-        ->query("SELECT c.*, pc.post_id
-                FROM post_category pc 
-                LEFT JOIN category c on pc.category_id = c.id
-                WHERE post_id IN (" . implode(', ', $ids) . ")")
-        ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Category::class);
-        
-        $postById = [];
-        foreach ($posts as $post) {
-            $postById[$post->getId()] = $post;
-        }
-        foreach ($categories as $category) {
-            $postById[$category->post_id]->setCategories($category);
-        }
         
         $title = 'Mon blog en MVC';
         $this->render('post/all', 
@@ -51,6 +31,7 @@ class PostController extends Controller
             "paginate" => $paginatedQuery->getNavHtml()
         ]);
     }
+
     public function show(array $params)
     {
         $id = (int)$params['id'];
@@ -61,7 +42,7 @@ class PostController extends Controller
         
         $statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
         $statement->execute([$id]);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, PostEntity::class);
         /** @var Post|false */
         $post = $statement->fetch();
         
@@ -90,7 +71,7 @@ class PostController extends Controller
             WHERE pc.post_id = :id"
             );
         $query->execute([':id' => $post->getId()]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Category::class);
+        $query->setFetchMode(\PDO::FETCH_CLASS, CategoryEntity::class);
         /** @var Category[] */
         $categories = $query->fetchAll();
         $title = "Article : " . $post->getName();

@@ -34,14 +34,15 @@ class Controller{
         return $this->app;
     }
 
-    protected function getRouter()
+    protected function generateUrl(string $routeName, array $params = []): string
     {
-            return $this->getApp()->getRouter();
+            return $this->getApp()->getRouter()->url($routeName, $params);
     }
 
     protected function loadModel(string $nameTable): void
     {
+        //$this->post
         $this->$nameTable = $this->getApp()->getTable($nameTable);
-        //dd($nameTable);
+        //dd($nameTable);//1
     }
 }

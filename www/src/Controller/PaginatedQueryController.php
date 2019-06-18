@@ -1,38 +1,26 @@
 <?php
-namespace App;
+namespace App\Controller;
 
-class PaginatedQuery
+class PaginatedQueryController
 {
-
-    private $queryCount;
-
-    private $query;
-
-    private $classMapping;
+    private $classTable;
 
     private $url;
 
     private $perPage;
-
-    private $pdo;
 
     private $items;
 
     private $count;
 
     public function __construct(
-        string $queryCount,
-        string $query,
-        string $classMapping,
-        string $url,
-        int    $perPage = 12
-    ) {
-        $this->queryCount   = $queryCount;
-        $this->query        = $query;
-        $this->classMapping = $classMapping;
+        Table $classTable,
+        string $url = null,
+        int    $perPage = 12) 
+    {
+        $this->classTable   = $classTable;
         $this->url          = $url;
         $this->perPage      = $perPage;
-        $this->pdo          = Connection::getPDO();
     }
 
     public function getItems(): array

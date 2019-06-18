@@ -74,7 +74,7 @@ class App {
     public function getTable(string $nameTable)
     {
         $nameTable = "App\\Model\\Table\\".ucfirst($nameTable)."Table";
-        return new $nameTable($this->getDb());
+        return new $nameTable($this->getDb());//2
     }
 
     public function getDb(): DatabaseController
