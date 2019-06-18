@@ -1,15 +1,20 @@
 <?php
 namespace App\Controller;
 
-use \App\Connection;
-use \App\Model\Post;
-use \App\Model\Category;
+use \App\Model\Entity\PostEntity;
+use \App\Model\Entity\CategoryEntity;
 
-class PostController extends Controller{
-
+class PostController extends Controller
+{
+    public function __construct()
+    {
+        $this->loadModel('post');
+        //$this->post
+    }
+    
     public function all()
     {
-        
+        dd($this->post);
         $paginatedQuery = new \App\PaginatedQuery(
             "SELECT count(id) FROM post",
             "SELECT * FROM post ORDER BY created_at DESC",
@@ -19,11 +24,9 @@ class PostController extends Controller{
         );
         $posts = $paginatedQuery->getItems();
         
-        
         $ids = array_map(function (Post $post) {
             return $post->getId();
         }, $posts);
-        
         
         $categories = Connection::getPDO()
         ->query("SELECT c.*, pc.post_id
@@ -31,7 +34,6 @@ class PostController extends Controller{
                 LEFT JOIN category c on pc.category_id = c.id
                 WHERE post_id IN (" . implode(', ', $ids) . ")")
         ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Category::class);
-        
         
         $postById = [];
         foreach ($posts as $post) {
@@ -49,7 +51,6 @@ class PostController extends Controller{
             "paginate" => $paginatedQuery->getNavHtml()
         ]);
     }
-
     public function show(array $params)
     {
         $id = (int)$params['id'];

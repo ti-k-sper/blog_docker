@@ -39,4 +39,9 @@ class Controller{
             return $this->getApp()->getRouter();
     }
 
+    protected function loadModel(string $nameTable): void
+    {
+        $this->$nameTable = $this->getApp()->getTable($nameTable);
+        //dd($nameTable);
+    }
 }
