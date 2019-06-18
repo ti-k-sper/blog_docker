@@ -13,12 +13,7 @@ class PostTable extends Table
             return $post->getId();
         }, $posts);
         
-        $categories = Connection::getPDO()
-        ->query("SELECT c.*, pc.post_id
-                FROM post_category pc 
-                LEFT JOIN category c on pc.category_id = c.id
-                WHERE post_id IN (" . implode(', ', $ids) . ")")
-        ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Entity\CategoryEntity::class);
+        $categories = (new CategoryTable($this->db))->AllInId(implode(', ', $ids));
         
         $postById = [];
         foreach ($posts as $post) {

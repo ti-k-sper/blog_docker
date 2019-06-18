@@ -33,4 +33,52 @@ class DatabaseController
         }
         return $this->$pdo;
     }
+
+    // $one fetch ou fetchAll
+    public function query(string $statement, string $class_name = null, $one = false)
+    {
+        $req = $this->getPDO()->query($statement);
+        if (
+            strpos($statement, 'UPDATE') === 0 ||
+            strpos($statement, 'INSERT') === 0 ||
+            strpos($statement, 'DELETE') === 0 
+        ) {
+            return $req;
+        }
+        if (is_null($class_name)) {
+            $req->setFetchMode(PDO::FETCH_OBJ);
+        } else {
+            $req->setFetchMode(PDO::FETCH_CLASS, $class_name);
+        }
+        if ($one) {
+            $datas = $req->fetch();
+        } else {
+            $datas = $req->fetchAll();
+        }
+        return $datas;
+    }
+
+    public function prepare(string $statement, array $attributes, ?string $class_name = null, $one = false)
+    {
+        $req = $this->getPDO()->prepare($statement);
+        $res = $req->execute($attributes);
+        if (
+            strpos($statement, 'UPDATE') === 0 ||
+            strpos($statement, 'INSERT') === 0 ||
+            strpos($statement, 'DELETE') === 0 
+        ) {
+            return $res;
+        }
+        if (is_null($class_name)) {
+            $req->setFetchMode(PDO::FETCH_OBJ);
+        } else {
+            $req->setFetchMode(PDO::FETCH_CLASS, $class_name);
+        }
+        if ($one) {
+            $datas = $req->fetch();
+        } else {
+            $datas = $req->fetchAll();
+        }
+        return $datas;
+    }
 }

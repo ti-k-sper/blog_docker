@@ -19,4 +19,26 @@ class Table
             $this->table = strtolower(str_replace('Table', '', $class_name));
         }
     }
+
+    public function query($statement, $attributes = null, $one = false, $class_name = false)
+    {
+        if (is_null($class_name)) {
+            $class_name = str_replace('Table', 'Entity', \get_class($this));
+        }
+
+        if ($attributes) {
+            return $this->db->prepare(
+                                $statement, 
+                                $attributes, 
+                                $class_name, 
+                                $one
+                                );
+        } else {
+            return $this->db->query(
+                                $statement, 
+                                $class_name, 
+                                $one
+                                );
+        }
+    }
 }
