@@ -1,0 +1,19 @@
+{% extends "layout/default.twig" %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+<div class="text-muted text-center pb-5 mb-5">
+    {{ post.getCreatedAt() | date('d/m/Y h:i') }}<br />
+    {% for category in categories %}
+        <!-- if ($key > 0) {
+            echo ', ';
+        }
+        $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]); ?> -->
+    <a href="{{category.url}}">{{category.name}}</a>
+    {% endfor %}
+</div>
+<p class="mx-4 text-justify">{{post.content}}</p>
+{% endblock content %}
