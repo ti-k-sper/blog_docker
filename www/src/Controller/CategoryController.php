@@ -66,7 +66,7 @@ class CategoryController extends Controller{
             exit();
         }
 
-        $title = 'categorie : ' . $category->getName();
+        $title = 'Catégorie : ' . $category->getName();
 
         $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
         $paginatedQuery = new PaginatedQuery(

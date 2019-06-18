@@ -41,7 +41,7 @@ class PostController extends Controller{
             $postById[$category->post_id]->setCategories($category);
         }
         
-        $title = 'Mon Super MEGA blog';
+        $title = 'Mon blog en MVC';
         $this->render('post/all', 
         [
             "title" => $title,
@@ -92,7 +92,7 @@ class PostController extends Controller{
         $query->setFetchMode(\PDO::FETCH_CLASS, Category::class);
         /** @var Category[] */
         $categories = $query->fetchAll();
-        $title = "article : " . $post->getName();
+        $title = "Article : " . $post->getName();
 
         $this->render(
             "post/show",
