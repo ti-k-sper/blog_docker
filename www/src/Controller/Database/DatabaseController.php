@@ -29,11 +29,12 @@ class DatabaseController
                 $this->db_user,
                 $this->db_pass);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //$this->pdo = $pdo;
         }
         return $this->pdo;
     }
 
-    // $one fetch ou fetchAll
+    // $one fetch(true) ou fetchAll(false)
     public function query(string $statement, string $class_name = null, $one = false)
     {
         $req = $this->getPDO()->query($statement);

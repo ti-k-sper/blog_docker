@@ -68,7 +68,7 @@ class PostEntity extends Entity
         return $this->categories;
     }
 
-    public function setCategories(Category $category): void
+    public function setCategories(CategoryEntity $category): void
     {
         $this->categories[] = $category;
     }

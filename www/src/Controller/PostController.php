@@ -12,6 +12,7 @@ class PostController extends Controller
     {
         $this->loadModel('post');//3
         //$this->post
+        $this->loadModel('category');
     }
     
     public function all()
@@ -22,6 +23,7 @@ class PostController extends Controller
             $this->generateUrl('home')
         );
         
+        $postById = $paginatedQuery->getItems();
         
         $title = 'Mon blog en MVC';
         $this->render('post/all', 
@@ -36,21 +38,28 @@ class PostController extends Controller
     {
         $id = (int)$params['id'];
         $slug = $params['slug'];
-        
-        
+
+        $post = $this->post->getPostById($id);
+        //dd($post);
+        /* =>PostTable
         $pdo = Connection::getPDO();
         
         $statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
         $statement->execute([$id]);
         $statement->setFetchMode(\PDO::FETCH_CLASS, PostEntity::class);
         /** @var Post|false */
-        $post = $statement->fetch();
-        
+        /*$post = $statement->fetch();
+        */
         if (!$post) {
             throw new Exception('Aucun article ne correspond à cet ID');
         }
-        
         if ($post->getSlug() !== $slug) {
+            $url = $this->generateUrl('post', ['id' => $id, 'slug' => $post->getSlug()]);
+            http_response_code(301);
+            header('Location: ' . $url);
+            exit();
+        }
+        /*if ($post->getSlug() !== $slug) {
             $url = $this->getRouter()->url(
                 'post',
                 [
@@ -61,9 +70,11 @@ class PostController extends Controller
             http_response_code(301);
             header('Location: ' . $url);
             exit();
-        }
-        
-        
+        }*/
+
+        $categories = $this->category->allInId($post->getId());
+        //dd($categories);
+        /* =>$categories
         $query = $pdo->prepare(
             "SELECT c.id, c.slug, c.name
             FROM post_category pc
@@ -73,7 +84,8 @@ class PostController extends Controller
         $query->execute([':id' => $post->getId()]);
         $query->setFetchMode(\PDO::FETCH_CLASS, CategoryEntity::class);
         /** @var Category[] */
-        $categories = $query->fetchAll();
+        /*$categories = $query->fetchAll();*/
+
         $title = "Article : " . $post->getName();
 
         $this->render(

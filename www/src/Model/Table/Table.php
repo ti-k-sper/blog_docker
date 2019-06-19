@@ -12,6 +12,7 @@ class Table
     public function __construct(DatabaseController $db)
     {
         $this->db = $db;
+        //dd($db);
         if (is_null($this->table)) {
             //               get_class = recup namespace  $this = PostTable
             $parts = explode('\\', get_class($this));
@@ -19,12 +20,8 @@ class Table
             $this->table = strtolower(str_replace('Table', '', $class_name));
         }
     }
-
-    public function count()
-    {
-        return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
-    }
-
+    //$statement=> SELECT..., $attributes=>execute, $one=>fetch ou fetchAll, $class_name=>setFetchMode(PDO::FETCH_CLASS, $class_name)
+    //                                                                          si null=>setFetchMode(PDO::FETCH_OBJ)
     public function query(string $statement, ?array $attributes = null, bool $one = false, ?string $class_name = null)
     {
         if (is_null($class_name)) {
@@ -45,5 +42,10 @@ class Table
                                 $one
                                 );
         }
+    }
+
+    public function count()
+    {
+        return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
     }
 }

@@ -13,7 +13,7 @@ class CategoryController extends Controller{
     public function all()
     {
 
-        $paginatedQuery = new PaginatedQuery(
+        $paginatedQuery = new PaginatedQueryController(
             "SELECT count(id) FROM category",
             "SELECT * FROM category 
             ORDER BY id",
