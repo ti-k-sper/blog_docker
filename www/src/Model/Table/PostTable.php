@@ -30,7 +30,6 @@ class PostTable extends Table
     {
         /* =>$post
         $pdo = Connection::getPDO();
-        
         $statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
         $statement->execute([$id]);
         $statement->setFetchMode(\PDO::FETCH_CLASS, PostEntity::class);

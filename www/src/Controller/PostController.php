@@ -43,7 +43,6 @@ class PostController extends Controller
         //dd($post);
         /* =>PostTable
         $pdo = Connection::getPDO();
-        
         $statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
         $statement->execute([$id]);
         $statement->setFetchMode(\PDO::FETCH_CLASS, PostEntity::class);

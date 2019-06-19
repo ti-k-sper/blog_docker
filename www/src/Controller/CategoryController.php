@@ -1,28 +1,39 @@
 <?php
 namespace App\Controller;
 
-use App\Model \ {
-    Category,
-    Post
+use App\Model\Entity\ {
+    CategoryEntity,
+    PostEntity
 };
-use App\Connection;
-use App\PaginatedQuery;
+use App\Controller\PaginatedQueryController;
 
-class CategoryController extends Controller{
+class CategoryController extends Controller
+{
+    public function __construct()
+    {
+        //$this->loadModel('post');//3
+        //$this->post
+        $this->loadModel('category');
+    }
 
     public function all()
     {
-
+        $paginatedQuery = new PaginatedQueryController(
+            $this->category,
+            $this->generateUrl('categories')
+        );
+        /*=>CategoryTable
         $paginatedQuery = new PaginatedQueryController(
             "SELECT count(id) FROM category",
             "SELECT * FROM category 
             ORDER BY id",
-            Category::class,
+            CategoryEntity::class,
             $this->getRouter()
                 ->url('categories'),
             10
-        );
+        );*/
         $categories = $paginatedQuery->getItems();
+
         $title = "Catégories";
 
         $this->render(
@@ -40,19 +51,16 @@ class CategoryController extends Controller{
         $id = (int)$params['id'];
         $slug = $params['slug'];
 
-                
         $pdo = Connection::getPDO();
-
         $statement = $pdo->prepare("SELECT * FROM category WHERE id=?");
         $statement->execute([$id]);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, Category::class);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, CategoryEntity::class);
         /** @var Category|false */
         $category = $statement->fetch();
 
         if (!$category) {
             throw new Exception('Aucune categorie ne correspond à cet ID');
         }
-
         if ($category->getSlug() !== $slug) {
             $url = $this->getRouter()->url(
                 'category',
