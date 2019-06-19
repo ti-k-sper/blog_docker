@@ -1,6 +1,10 @@
 <?php
 namespace App\Controller;
 
+use \App\Model\Table\Table;
+
+use \App\URL;
+
 class PaginatedQueryController
 {
     private $classTable;
@@ -32,9 +36,7 @@ class PaginatedQueryController
         }
         if ($this->items === null) {
             $offset = ($currentPage - 1) * $this->perPage;
-            $statement = $this->pdo->query("{$this->query} LIMIT {$this->perPage}  OFFSET {$offset}");
-            $statement->setFetchMode(\PDO::FETCH_CLASS, $this->classMapping);
-            $this->items = $statement->fetchAll();
+            $this->items = $this->classTable->allByLimit($this->perPage, $offset);
         }
         return $this->items;
     }
@@ -83,9 +85,7 @@ HTML;
     private function getNbPages(): float
     {
         if ($this->count === null) {
-            $this->count = $this->pdo
-                ->query($this->queryCount)
-                ->fetch()[0];
+            $this->count = $this->classTable->count()->nbrow;
         }
         return ceil($this->count / $this->perPage);
     }

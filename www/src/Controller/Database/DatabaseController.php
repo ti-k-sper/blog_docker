@@ -23,15 +23,14 @@ class DatabaseController
     public function getPDO(): PDO
     {
         if (is_null($this->pdo)){
-            $pdo = new PDO(
+            $this->pdo = new PDO(
                 "mysql:host=" . $this->db_host .";
                 dbname=" . $this->db_name,
                 $this->db_user,
                 $this->db_pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo = $pdo;
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-        return $this->$pdo;
+        return $this->pdo;
     }
 
     // $one fetch ou fetchAll

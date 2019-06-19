@@ -20,7 +20,12 @@ class Table
         }
     }
 
-    public function query($statement, $attributes = null, $one = false, $class_name = false)
+    public function count()
+    {
+        return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
+    }
+
+    public function query(string $statement, ?array $attributes = null, bool $one = false, ?string $class_name = null)
     {
         if (is_null($class_name)) {
             $class_name = str_replace('Table', 'Entity', \get_class($this));
