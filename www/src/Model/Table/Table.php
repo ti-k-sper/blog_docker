@@ -44,8 +44,21 @@ class Table
         }
     }
 
-    public function count()
+    public function count($id = null)
     {
         return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
+    }
+
+    public function find($id)
+    {
+        /*=>Table
+        $pdo = Connection::getPDO();
+        $statement = $pdo->prepare("SELECT * FROM {$this->table} WHERE id=?");
+        $statement->execute([$id]);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, {$this->table}Entity::class);
+        /** @var Category|false */
+        /*$category = $statement->fetch();
+        */
+        return $this->query("SELECT * FROM {$this->table} WHERE id=?", [$id], true);
     }
 }

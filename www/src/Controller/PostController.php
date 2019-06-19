@@ -39,9 +39,9 @@ class PostController extends Controller
         $id = (int)$params['id'];
         $slug = $params['slug'];
 
-        $post = $this->post->getPostById($id);
+        $post = $this->post->find($id);
         //dd($post);
-        /* =>PostTable
+        /* =>Table
         $pdo = Connection::getPDO();
         $statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
         $statement->execute([$id]);

@@ -41,6 +41,22 @@ class PaginatedQueryController
         return $this->items;
     }
 
+    public function getItemsInId($id): array
+    {
+        $nbPage = $this->getNbPages();
+        $currentPage = $this->getCurrentPage();
+        if ($currentPage > $nbPage) {
+            throw new \Exception('pas de pages');
+        }
+        if ($this->items === null) {
+            $offset = ($currentPage - 1) * $this->perPage;
+            //dd($this->classTable);
+            //dd($offset);
+            $this->items = $this->classTable->allInIdByLimit($this->perPage, $offset, $id);
+        }
+        return $this->items;
+    }
+
     public function getNav(): array
     {
         $uri = $this->url;

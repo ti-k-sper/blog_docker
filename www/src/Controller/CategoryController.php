@@ -5,13 +5,14 @@ use App\Model\Entity\ {
     CategoryEntity,
     PostEntity
 };
+
 use App\Controller\PaginatedQueryController;
 
 class CategoryController extends Controller
 {
     public function __construct()
     {
-        //$this->loadModel('post');//3
+        $this->loadModel('post');//3
         //$this->post
         $this->loadModel('category');
     }
@@ -51,48 +52,51 @@ class CategoryController extends Controller
         $id = (int)$params['id'];
         $slug = $params['slug'];
 
+        $category = $this->category->find($id);
+        //dd($category);
+        /*=>Table
         $pdo = Connection::getPDO();
         $statement = $pdo->prepare("SELECT * FROM category WHERE id=?");
         $statement->execute([$id]);
         $statement->setFetchMode(\PDO::FETCH_CLASS, CategoryEntity::class);
         /** @var Category|false */
-        $category = $statement->fetch();
-
+        /*$category = $statement->fetch();
+        */
         if (!$category) {
             throw new Exception('Aucune categorie ne correspond à cet ID');
         }
         if ($category->getSlug() !== $slug) {
-            $url = $this->getRouter()->url(
-                'category',
-                [
-                    'id' => $id,
-                    'slug' => $category->getSlug()
-                ]
-            );
+            $url = $this->generateUrl('category', ['id' => $id, 'slug' => $category->getSlug()]);
             http_response_code(301);
             header('Location: ' . $url);
             exit();
         }
 
-        $title = 'Catégorie : ' . $category->getName();
+        $uri = $this->generateUrl("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
+        //dd($uri);
+        $paginatedQuery = new PaginatedQueryController(
+            $this->post,
+            $uri
+        );
+        //dd($paginatedQuery);
 
-        $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
-        $paginatedQuery = new PaginatedQuery(
+        /*=>CategoryTable AllInIdByLimit
+        $paginatedQuery = new PaginatedQueryController(
             "SELECT count(category_id) FROM post_category WHERE category_id = {$category->getId()}",
             "SELECT p.*
             FROM post p
             JOIN post_category pc ON pc.post_id = p.id
             WHERE pc.category_id = {$category->getId()}
             ORDER BY created_at DESC",
-            Post::class,
+            PostEntity::class,
             $uri
         );
-        $posts = $paginatedQuery->getItems();
-
+        */
+        /*
         $ids = array_map(function (Post $post) {
             return $post->getId();
         }, $posts);
-
+        /*
         $categories = Connection::getPDO()
         ->query("SELECT c.*, pc.post_id
                 FROM post_category pc 
@@ -107,6 +111,11 @@ class CategoryController extends Controller
         foreach ($categories as $category) {
             $postById[$category->post_id]->setCategories($category);
         }
+        */
+
+        $postById = $paginatedQuery->getItemsInId($id);
+
+        $title = 'Catégorie : ' . $category->getName();
 
         $this->render(
             "category/show",
