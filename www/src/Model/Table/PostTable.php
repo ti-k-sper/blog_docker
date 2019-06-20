@@ -5,6 +5,18 @@ use App\Model\Entity\PostEntity;
 
 class PostTable extends Table
 {
+    public function countById(?int $id = null) 
+    {
+        if($id) {
+            return $this->query("SELECT COUNT(*) as nbrow FROM {$this->table} as p
+            JOIN post_category as pc ON pc.post_id = p.id
+            WHERE pc.category_id = {$id}", null, true);
+        }
+        else {
+            return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
+        }
+    }
+
     public function allByLimit(int $limit, int $offset)
     {
         $posts = $this->query("SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT {$limit}  OFFSET {$offset}");
@@ -26,11 +38,11 @@ class PostTable extends Table
         return $postById;
     }
 
-    public function allInIdByLimit(int $limit, int $offset, int $idCategory)
+    public function allInIdByLimit(int $limit, int $offset, int $id)
     {
         $posts = $this->query("SELECT * FROM {$this->table} as p 
                             JOIN post_category as pc ON pc.post_id = p.id 
-                            WHERE pc.category_id = {$idCategory} 
+                            WHERE pc.category_id = {$id} 
                             ORDER BY created_at DESC 
                             LIMIT {$limit} OFFSET {$offset}");
         //"SELECT p.* FROM post p JOIN post_category pc ON pc.post_id = p.id WHERE pc.category_id = {$category->getId()} ORDER BY created_at DESC"

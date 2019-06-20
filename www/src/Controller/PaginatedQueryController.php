@@ -31,7 +31,7 @@ class PaginatedQueryController
     {
         $nbPage = $this->getNbPages();
         $currentPage = $this->getCurrentPage();
-        if ($currentPage > $nbPage) {
+        if ($currentPage-> $nbPage) {
             throw new \Exception('pas de pages');
         }
         if ($this->items === null) {
@@ -41,11 +41,11 @@ class PaginatedQueryController
         return $this->items;
     }
 
-    public function getItemsInId($id): array
+    public function getItemsInId(int $id): array
     {
-        $nbPage = $this->getNbPages();
+        $nbPage = $this->getNbPages($id);
         $currentPage = $this->getCurrentPage();
-        if ($currentPage > $nbPage) {
+        if ($currentPage-> $nbPage) {
             throw new \Exception('pas de pages');
         }
         if ($this->items === null) {
@@ -98,10 +98,14 @@ HTML;
     }
 
 
-    private function getNbPages(): float
+    private function getNbPages(?int $id = null): float
     {
         if ($this->count === null) {
-            $this->count = $this->classTable->count()->nbrow;
+            if ($id === null) {
+                $this->count = $this->classTable->count()->nbrow;
+            } else {
+                $this->count = $this->classTable->countById($id)->nbrow;
+            }
         }
         return ceil($this->count / $this->perPage);
     }
