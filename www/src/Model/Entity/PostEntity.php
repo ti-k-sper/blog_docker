@@ -1,7 +1,9 @@
 <?php
 namespace App\Model\Entity;
 
-use App\Helpers\Text;
+use Core\Model\Entity;
+
+use Core\Controller\Helpers\TextController;
 
 class PostEntity extends Entity
 {
@@ -60,9 +62,9 @@ class PostEntity extends Entity
 
     public function getExcerpt(int $lenght): string
     {
-        return nl2br(htmlentities(TEXT::excerpt($this->getContent(), $lenght)));
+        return nl2br(htmlentities(TextController::excerpt($this->getContent(), $lenght)));
     }
-    
+
     public function getCategories(): array
     {
         return $this->categories;
@@ -79,7 +81,7 @@ class PostEntity extends Entity
             ->getRouter()
             ->url('post', [
                 "slug" => $this->getSlug(),
-                "id"=> $this->getId()
-                ]);
+                "id" => $this->getId()
+            ]);
     }
 }

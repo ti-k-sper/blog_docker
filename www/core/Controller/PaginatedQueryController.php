@@ -1,9 +1,8 @@
 <?php
-namespace App\Controller;
 
-use \App\Model\Table\Table;
+namespace Core\Controller;
 
-use \App\URL;
+use \Core\Model\Table;
 
 class PaginatedQueryController
 {
@@ -20,8 +19,8 @@ class PaginatedQueryController
     public function __construct(
         Table $classTable,
         string $url = null,
-        int    $perPage = 12) 
-    {
+        int    $perPage = 12
+    ) {
         $this->classTable   = $classTable;
         $this->url          = $url;
         $this->perPage      = $perPage;
@@ -31,7 +30,7 @@ class PaginatedQueryController
     {
         $nbPage = $this->getNbPages();
         $currentPage = $this->getCurrentPage();
-        if ($currentPage-> $nbPage) {
+        if ($currentPage > $nbPage) {
             throw new \Exception('pas de pages');
         }
         if ($this->items === null) {
@@ -45,13 +44,11 @@ class PaginatedQueryController
     {
         $nbPage = $this->getNbPages($id);
         $currentPage = $this->getCurrentPage();
-        if ($currentPage-> $nbPage) {
+        if ($currentPage > $nbPage) {
             throw new \Exception('pas de pages');
         }
         if ($this->items === null) {
             $offset = ($currentPage - 1) * $this->perPage;
-            //dd($this->classTable);
-            //dd($offset);
             $this->items = $this->classTable->allInIdByLimit($this->perPage, $offset, $id);
         }
         return $this->items;
@@ -75,26 +72,9 @@ class PaginatedQueryController
         return $navArray;
     }
 
-    public function getNavHtml(): string
+    protected function getCurrentPage(): int
     {
-        $urls = $this->getNav();
-        $html = "";
-        foreach ($urls as $key => $url) {
-            $class = $this->getCurrentPage() == $key ? " active" : "";
-            $html .= "<li class=\"page-item {$class}\"><a class=\"page-link\" href=\"{$url}\">{$key}</a></li>";
-        }
-        return <<<HTML
-        <nav class="Page navigation">
-            <ul class="pagination justify-content-center">
-                {$html}
-            </ul>
-        </nav>
-HTML;
-    }
-
-    private function getCurrentPage(): int
-    {
-        return URL::getPositiveInt('page', 1);
+        return URLController::getPositiveInt('page', 1);
     }
 
 
@@ -104,7 +84,7 @@ HTML;
             if ($id === null) {
                 $this->count = $this->classTable->count()->nbrow;
             } else {
-                $this->count = $this->classTable->countById($id)->nbrow;
+                $this->count = $this->classTable->countByid($id)->nbrow;
             }
         }
         return ceil($this->count / $this->perPage);
